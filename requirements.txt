@@ -1,0 +1,6 @@
+pyTelegramBotAPI==3.8.1
+time
+random
+datetime
+pymongo==3.12.3
+requests==2.26.0
