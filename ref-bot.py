@@ -509,7 +509,7 @@ def set_email_address(message):
 
     # Check if the email is in a valid format
     if not is_valid_email(email):
-        bot.send_message(user_id, "*⛔️ Invalid email address!* Please send a valid Gmail address.",parse_mode="markdown")
+        bot.send_message(user_id, f"*⛔️ Invalid {currency} address!* Please send a valid {currency} address.",parse_mode="markdown")
         bot.register_next_step_handler(message, set_email_address)
         return
 
