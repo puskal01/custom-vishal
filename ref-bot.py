@@ -10,15 +10,15 @@ import json
 
 from telebot.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton,InlineKeyboardMarkup,ReplyKeyboardRemove
 
-bot_token = "7420686392:AAGOBTPVXPyTp0LRepJzRb0EfiYfWJlV7HY" # bot token here from @botfather
-Contract = "0xc77d2d650676a920732568f00610777dc945574a"
+bot_token = "6818009167:AAF7ilgqpul66bhzyeDZ9yZOkwsDwNVe_Xc" # bot token here from @botfather
+Contract = "N/A"
 bot = telebot.TeleBot(bot_token)
 
 mongo_cli = MongoClient('mongodb+srv://celo:advbot0n@cluster0.abfjjdi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0') #mongodb uri form mondodb.com
 
 
 admin_chat_id = 2056940619 # admin id
-db = mongo_cli['teddy'] #database name
+db = mongo_cli['celoo'] #database name
 
 required_channels = ["@Airdrop_hunters4", "@Airdrop_Looters2", "@Airdrop_Hunters8", "@Airdroplooter8", "@RealAirdrop_payouts"] # check command channel id or username 
 
@@ -49,8 +49,8 @@ def menu_markup():
     m_button100 = KeyboardButton(buttons["uselful_btn"])
 
     menu_button.add(m_button1)
-    menu_button.add(m_button2, m_button3, m_button4)
-    menu_button.add(m_button100)
+    menu_button.add(m_button2, m_button3)
+    menu_button.add(m_button4)
 
     return menu_button
 
@@ -488,7 +488,7 @@ def send_join_message(message):
     email = user_data.get('email',None)
 
     if not email:
-        msg = "<b>Please enter your Victon Address:</b>"
+        msg = "<b>Please enter your CELO Address:</b>"
         bot.send_message(user_id, msg, parse_mode="HTML")
         bot.register_next_step_handler(message, set_email_address)
         return
@@ -538,7 +538,7 @@ def set_email_address(message):
     #### end ####
     
     db.users.update_one({'user_id':user_id},{'$set':{'email':email}},upsert=True)
-    bot.send_message(user_id, f"*✅ Your Victon Address  Set To:* {email}", parse_mode="markdown")
+    bot.send_message(user_id, f"*✅ Your CELO Address  Set To:* {email}", parse_mode="markdown")
 
     menu(user_id)
 
@@ -633,7 +633,7 @@ def handle_all_commands(message):
     ###############
     if message.text == buttons['balance_btn']:
         markup = InlineKeyboardMarkup()
-        button = InlineKeyboardButton("🎁🎉 CLAIM Preton 🎉🎁", url="https://t.me/preton_drop_bot?start=70172ca6-1e7c-47d3-b8fe-513eb8300a2c")
+        button = InlineKeyboardButton("🎁🎉 CLAIM Preton 🎉🎁", url="https://t.me/PeaAIBot/Fission?startapp=sid-6684b1c4ff89920011a54029")
         markup.add(button)
         text = (f"<b>✳️ Account Balance</b>\n\n"
         f"<b>🚥 User Name:</b> <code>{message.from_user.first_name}</code>\n\n"
@@ -785,7 +785,7 @@ def process_withdraw(message):
     db.users.update_one({'user_id':user_id},{'$inc':{'balance':-amo}},upsert=True)
     amoooo = str(message.text)
     db.users.update_one({'user_id':user_id},{'$set':{'last_withdraw_at':datetime.now().strftime("%Y-%m-%d %H:%M:%S")}},upsert=True)
-    url = f"http://cryptopay-up-apis.me/sendanyviccoin/{amoooo}/{api_key}/{email}/{Contract}"
+    url = f"http://cryptopay-up-apis.me/sendcelopvtltdkp/{amoooo}/{api_key}/{email}"
     dataresp = requests.get(url)
     response = dataresp.json() 
     tx_hash = response['txHash']
@@ -798,7 +798,7 @@ def process_withdraw(message):
     )
     bot.send_message(user_id,msg,parse_mode="markdown")
     markup = InlineKeyboardMarkup()
-    button = InlineKeyboardButton("❤️ Claim Extra TON ", url="https://t.me/preton_drop_bot?start=70172ca6-1e7c-47d3-b8fe-513eb8300a2c")
+    button = InlineKeyboardButton("❤️ Claim Extra USDT ", url="https://t.me/PeaAIBot/Fission?startapp=sid-6684b1c4ff89920011a54029")
     markup.add(button)
     text = ("<b>🚀 New Withdrawal Paid!</b>\n\n"
         f"<b>🔰 User :</b> <i>{message.from_user.first_name}</i>\n"
@@ -806,7 +806,7 @@ def process_withdraw(message):
         f"<b>♨ User Referrals ::</b> <i>{total_refs}</i>\n"
         f"<b>💲 Amount :</b> <i>{amo} {currency}</i>\n"
         f"<b>🔎 Address  :</b> <code>{email}</code>\n"
-        f"<b>🪙 Hash :</b> <a href='https://www.vicscan.xyz/tx/{tx_hash}'>{tx_hash}</a>\n\n"
+        f"<b>🪙 Hash :</b> <a href='https://explorer.celo.org/mainnet/tx/{tx_hash}'>{tx_hash}</a>\n\n"
         f"<b>🔃 Bot Link : @{bot_username}</b>")
     bot.send_message(pay_channel, text, parse_mode="HTML", reply_markup=markup)
     settings = db.settings.find_one({'user_id':'global'})
@@ -841,4 +841,3 @@ if __name__ == '__main__':
             print(f"Error:{e}")
             bot.send_message(admin_chat_id, f"*Error*:\n\n`{e}`",parse_mode="markdown")
             time.sleep(10)
-
